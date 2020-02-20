@@ -17,34 +17,39 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping
-    public String getUser()
-    {
-        return "Get user was called ";
+    @GetMapping (path = "/{id}")
+    public UserRest getUser(@PathVariable String id) {
+        UserRest returnValue= new UserRest();
+       UserDto userDto = userService.getUserByUserId(id);
+        BeanUtils.copyProperties(userDto, returnValue);
+
+        return returnValue;
     }
+
     @PostMapping
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails)
-    {
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
 
 
-        UserRest returnValue =new UserRest();
-        UserDto userDto=new UserDto();
-        BeanUtils.copyProperties(userDetails,userDto);
+        UserRest returnValue = new UserRest();
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
 
-        UserDto createdUser= userService.createUser(userDto);
-        BeanUtils.copyProperties(createdUser,returnValue);
+        UserDto createdUser = userService.createUser(userDto);
+        BeanUtils.copyProperties(createdUser, returnValue);
 
 
         return returnValue;
     }
+
     @PutMapping
     public String updateUser()
     {
         return "Update user was called ";
     }
+
     @DeleteMapping
-    public String deleteUser()
-    {
+    public String deleteUser() {
+
         return "Delete user was called ";
     }
 
