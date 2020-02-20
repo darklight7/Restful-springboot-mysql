@@ -1,18 +1,15 @@
 package com.example.Demo.ui.controller;
 
-import com.example.Demo.exception.UserServiceException;
 import com.example.Demo.service.UserService;
 import com.example.Demo.shared.dto.UserDto;
 import com.example.Demo.ui.model.request.UserDetailsRequestModel;
-import com.example.Demo.ui.model.response.ErrorMessages;
+import com.example.Demo.ui.model.response.OperationStatusModel;
+import com.example.Demo.ui.model.response.RequestOperationStatus;
 import com.example.Demo.ui.model.response.UserRest;
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.awt.*;
 
 
 @RestController
@@ -69,10 +66,18 @@ public class UserController {
         return returnValue;
     }
 
-    @DeleteMapping
-    public String deleteUser() {
+    @DeleteMapping( path = "/{id}",
+            produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public OperationStatusModel deleteUser(@PathVariable String id) {
 
-        return "Delete user was called ";
+        OperationStatusModel returnValue =new OperationStatusModel();
+        returnValue.setOperationName(RequestOperationName.DELETE.name());
+
+        userService.deleteUser(id);
+
+        returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return returnValue;
+
     }
 
 
