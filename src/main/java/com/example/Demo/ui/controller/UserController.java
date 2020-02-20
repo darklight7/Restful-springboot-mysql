@@ -9,7 +9,11 @@ import com.example.Demo.ui.model.response.UserRest;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController
@@ -76,6 +80,24 @@ public class UserController {
         userService.deleteUser(id);
 
         returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+        return returnValue;
+
+    }
+
+    @GetMapping(produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+
+    public List<UserRest> getUsers(@RequestParam(value = "page", defaultValue = "0")int page,
+                                   @RequestParam(value = "limit", defaultValue = "25")int limit
+    )
+    {
+        List<UserRest>returnValue =new ArrayList<>();
+        List<UserDto> users = userService.getUsers(page,limit);
+
+        for (UserDto userDto : users){
+            UserRest userModel =new UserRest();
+            BeanUtils.copyProperties(userDto,userModel);
+            returnValue.add(userModel);
+        }
         return returnValue;
 
     }
