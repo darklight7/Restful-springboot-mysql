@@ -1,10 +1,13 @@
 package com.example.Demo.service.impl;
 
+import com.example.Demo.exception.UserServiceException;
 import com.example.Demo.io.repository.UserRepository;
 import com.example.Demo.io.entity.UserEntity;
 import com.example.Demo.service.UserService;
 import com.example.Demo.shared.Utils;
 import com.example.Demo.shared.dto.UserDto;
+import com.example.Demo.ui.model.response.ErrorMessage;
+import com.example.Demo.ui.model.response.ErrorMessages;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -66,6 +69,23 @@ public class UserServiceImpl implements UserService {
         UserEntity userEntity = userRepository.findByUserId(userId);
         if (userEntity == null) throw new UsernameNotFoundException(userId);
         BeanUtils.copyProperties(userEntity, returnValue);
+        return returnValue;
+    }
+
+    @Override
+    public UserDto updateUser(String userId, UserDto user) {
+
+        UserDto returnValue = new UserDto();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        if (userEntity == null)
+            throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+
+        userEntity.setFirstName(user.getFirstName());
+        userEntity.setLastName(user.getLastName());
+
+        UserEntity updatedUserDetails=  userRepository.save(userEntity);
+        BeanUtils.copyProperties(updatedUserDetails, returnValue);
+
         return returnValue;
     }
 

@@ -1,8 +1,10 @@
 package com.example.Demo.ui.controller;
 
+import com.example.Demo.exception.UserServiceException;
 import com.example.Demo.service.UserService;
 import com.example.Demo.shared.dto.UserDto;
 import com.example.Demo.ui.model.request.UserDetailsRequestModel;
+import com.example.Demo.ui.model.response.ErrorMessages;
 import com.example.Demo.ui.model.response.UserRest;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.springframework.beans.BeanUtils;
@@ -33,10 +35,12 @@ public class UserController {
     @PostMapping(
             consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
-    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails) {
+    public UserRest createUser(@RequestBody UserDetailsRequestModel userDetails)throws Exception
+    {
 
 
         UserRest returnValue = new UserRest();
+        if (userDetails.getFirstName().isEmpty()) throw new NullPointerException("The object is null");
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
 
@@ -47,10 +51,22 @@ public class UserController {
         return returnValue;
     }
 
-    @PutMapping
-    public String updateUser()
+    @PutMapping( path = "/{id}",
+    consumes = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE},
+    produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public UserRest updateUser(@PathVariable String id,@RequestBody UserDetailsRequestModel userDetails)
     {
-        return "Update user was called ";
+
+        UserRest returnValue = new UserRest();
+        if (userDetails.getFirstName().isEmpty()) throw new NullPointerException("The object is null");
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
+
+        UserDto updateUser = userService.updateUser(id,userDto);
+        BeanUtils.copyProperties(updateUser, returnValue);
+
+
+        return returnValue;
     }
 
     @DeleteMapping
