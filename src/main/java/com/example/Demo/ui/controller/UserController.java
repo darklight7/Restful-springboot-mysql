@@ -128,4 +128,16 @@ if (addressDto !=null && !addressDto.isEmpty()) {
         return returnValue;
     }
 
+
+
+    @GetMapping (path = "/{id}/addresses/{addressId}",
+            produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public AddressesRest getUserAddress(@PathVariable String addressId) {
+
+        AddressDto addressDto =addressService.getAddress(addressId);
+
+            return new ModelMapper().map(addressDto, AddressesRest.class);
+
+    }
+
 }
