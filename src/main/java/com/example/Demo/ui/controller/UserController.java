@@ -1,18 +1,23 @@
 package com.example.Demo.ui.controller;
 
+import com.example.Demo.service.AddressService;
 import com.example.Demo.service.UserService;
+import com.example.Demo.shared.dto.AddressDto;
 import com.example.Demo.shared.dto.UserDto;
 import com.example.Demo.ui.model.request.UserDetailsRequestModel;
+import com.example.Demo.ui.model.response.AddressesRest;
 import com.example.Demo.ui.model.response.OperationStatusModel;
 import com.example.Demo.ui.model.response.RequestOperationStatus;
 import com.example.Demo.ui.model.response.UserRest;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +28,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
+    @Autowired
+    AddressService addressService;
     @GetMapping (path = "/{id}",
     produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
     public UserRest getUser(@PathVariable String id) {
@@ -103,7 +109,23 @@ public class UserController {
         }
         return returnValue;
 
+
     }
 
+    @GetMapping (path = "/{id}/addresses",
+            produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_VALUE})
+    public List<AddressesRest> getUserAddresses(@PathVariable String id) {
+
+        List<AddressesRest> returnValue=new ArrayList<>();
+
+List<AddressDto> addressDto =addressService.getAddresses(id);
+
+if (addressDto !=null && !addressDto.isEmpty()) {
+    Type listType = new TypeToken<List<AddressesRest>>() {
+    }.getType();
+    returnValue = new ModelMapper().map(addressDto, listType);
+}
+        return returnValue;
+    }
 
 }
