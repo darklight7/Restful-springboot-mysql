@@ -20,12 +20,20 @@ public class AddressEntity implements Serializable {
     @Column(length = 100,nullable = false)
     private String streetName;
     @Column(length = 7,nullable = false)
-    private String postelCode;
+    private String postalCode;
     @Column(length = 10,nullable = false)
     private String type;
     @ManyToOne
     @JoinColumn(name = "users_id")
     private UserEntity userDetails;
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
 
     public long getId() {
         return id;
@@ -67,13 +75,6 @@ public class AddressEntity implements Serializable {
         this.streetName = streetName;
     }
 
-    public String getPostelCode() {
-        return postelCode;
-    }
-
-    public void setPostelCode(String postelCode) {
-        this.postelCode = postelCode;
-    }
 
     public String getType() {
         return type;

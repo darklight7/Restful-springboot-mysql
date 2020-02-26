@@ -1,38 +1,20 @@
-package com.example.Demo.shared.dto;
+package com.example.Demo.ui.model.response;
 
-public class AddressDto {
-
-    private long id;
+public class AddressesRest {
     private String addressId;
     private String city;
     private String country;
     private String streetName;
     private String postalCode;
     private String type;
-    private UserDto userDetails;
-
-    public String getPostalCode() {
-        return postalCode;
-    }
-
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
-    }
 
     public String getAddressId() {
+
         return addressId;
     }
 
     public void setAddressId(String addressId) {
         this.addressId = addressId;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getCity() {
@@ -59,6 +41,13 @@ public class AddressDto {
         this.streetName = streetName;
     }
 
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
 
     public String getType() {
         return type;
@@ -67,14 +56,4 @@ public class AddressDto {
     public void setType(String type) {
         this.type = type;
     }
-
-    public UserDto getUserDetails() {
-        return userDetails;
-    }
-
-    public void setUserDetails(UserDto userDetails) {
-        this.userDetails = userDetails;
-    }
-
-
 }
