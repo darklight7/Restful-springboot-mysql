@@ -9,12 +9,14 @@ import com.example.Demo.shared.dto.AddressDto;
 import com.example.Demo.shared.dto.UserDto;
 import com.example.Demo.ui.model.response.ErrorMessage;
 import com.example.Demo.ui.model.response.ErrorMessages;
+import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,6 +61,8 @@ public class UserServiceImpl implements UserService {
         String publicUserId = utils.generateUserId(30);
         userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userEntity.setUserId(publicUserId);
+        userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
+    userEntity.setEmailVerificationStatus(false);
         UserEntity storedUserDetails = userRepository.save(userEntity);
         //BeanUtils.copyProperties(storedUserDetails, returnValue);
         UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
@@ -130,15 +134,37 @@ List<UserEntity> users=usersPage.getContent();
         return returnValue;
     }
 
+    @Override
+    public boolean verifyEmailToken(String token) {
+        boolean returnValue =false;
+        UserEntity userEntity=userRepository.findUserByEmailVerificationToken(token);
+        if (userEntity!=null)
+        {
+            boolean hoastokenExpired=Utils.hasTokenExpired(token);
+            if (!hoastokenExpired){
+                userEntity.setEmailVerificationToken((null));
+                userEntity.setEmailVerificationStatus(Boolean.TRUE);
+                userRepository.save(userEntity);
+                returnValue= true;
+
+            }
+        }
+        return returnValue;
+
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findUserByEmail(email);
         if (userEntity == null) throw new UsernameNotFoundException(email);
 
+return new  User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userEntity.getEmailVerificationStatus(),
+        true, true,
+        true, new ArrayList<>());
 
 
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+            //return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
 
     }
 }
