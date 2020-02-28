@@ -4,6 +4,7 @@ import com.example.Demo.exception.UserServiceException;
 import com.example.Demo.io.repository.UserRepository;
 import com.example.Demo.io.entity.UserEntity;
 import com.example.Demo.service.UserService;
+import com.example.Demo.shared.AmazonSES;
 import com.example.Demo.shared.Utils;
 import com.example.Demo.shared.dto.AddressDto;
 import com.example.Demo.shared.dto.UserDto;
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
         //BeanUtils.copyProperties(storedUserDetails, returnValue);
         UserDto returnValue = modelMapper.map(storedUserDetails, UserDto.class);
 
+        new AmazonSES().verifyEmail(returnValue);
         return returnValue;
     }
 
