@@ -4,6 +4,7 @@ import com.example.Demo.service.AddressService;
 import com.example.Demo.service.UserService;
 import com.example.Demo.shared.dto.AddressDto;
 import com.example.Demo.shared.dto.UserDto;
+import com.example.Demo.ui.model.request.PasswordResetModel;
 import com.example.Demo.ui.model.request.PasswordResetRequestModel;
 import com.example.Demo.ui.model.request.UserDetailsRequestModel;
 import com.example.Demo.ui.model.response.AddressesRest;
@@ -208,9 +209,6 @@ if (addressDto !=null && !addressDto.isEmpty()) {
         return returnValue;
     }
 
-
-
-/*
     @PostMapping(path = "/password-reset",
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
@@ -231,5 +229,5 @@ if (addressDto !=null && !addressDto.isEmpty()) {
 
         return returnValue;
     }
-*/
+
 }
