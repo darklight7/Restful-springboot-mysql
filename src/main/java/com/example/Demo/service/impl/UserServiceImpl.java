@@ -1,6 +1,8 @@
 package com.example.Demo.service.impl;
 
 import com.example.Demo.exception.UserServiceException;
+import com.example.Demo.io.entity.PasswordResetTokenEntity;
+import com.example.Demo.io.repository.PasswordResetTokenRepository;
 import com.example.Demo.io.repository.UserRepository;
 import com.example.Demo.io.entity.UserEntity;
 import com.example.Demo.service.UserService;
@@ -38,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Override
     public UserDto createUser(UserDto user) {
