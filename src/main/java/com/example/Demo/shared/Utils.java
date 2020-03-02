@@ -57,14 +57,14 @@ public String generateEmailVerificationToken(String userId){
     return token ;
     }
 
-
-
-
-
-
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+
+
