@@ -236,4 +236,3 @@ return new  User(userEntity.getEmail(), userEntity.getEncryptedPassword(), userE
 
 }
 
-}

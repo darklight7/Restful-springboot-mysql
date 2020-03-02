@@ -76,11 +76,11 @@ public class AmazonSES {
                                 .withText(new Content().withCharset("UTF-8").withData(textBodyWithToken)))
                         .withSubject(new Content().withCharset("UTF-8").withData(SUBJECT)))
                 .withSource(FROM);
-        for (int i=0;i<50;i++) {
-            client.sendEmail(request);
-            System.out.println("Email sent!");
 
-        }
+            client.sendEmail(request);
+
+
+
     }
 
     public boolean sendPasswordResetRequest(String firstName, String email, String token)
